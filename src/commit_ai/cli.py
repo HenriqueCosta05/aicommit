@@ -1,7 +1,8 @@
+#!/usr/bin/env python3
 import os
 import click
 from .git_utils import get_git_diff, commit_changes
-from .ai_handler import AICommitMessageGenerator
+from .ai_handler import generate_commit_message
 
 @click.group()
 def cli():
@@ -17,19 +18,14 @@ def cli():
               help="AI model to use for generation")
 def generate(staged_only: bool, auto_commit: bool, model: str):
     """Generate commit messages using AI."""
-    ai = AICommitMessageGenerator(model=model)
-    
-    # Initialize the AI handler
-    click.echo("Initializing AI commit message generator...")
-    ai.initialize()
-    
+    # Check for changes
     diff = get_git_diff(staged_only)
     if not diff:
         click.echo("No changes detected. Use --no-staged-only for all changes.")
         return
     
     click.echo("Generating commit message...")
-    message = ai.generate_commit_message(diff)
+    message = generate_commit_message(staged_only).text
     
     click.echo("\nSuggested commit message:")
     click.echo(click.style(message, fg="green"))
@@ -46,7 +42,6 @@ def generate(staged_only: bool, auto_commit: bool, model: str):
             else:
                 click.echo("Failed to commit changes.", err=True)
 
-# This is important! Update your main function to use the new CLI group
 def main():
     """Entry point for the CLI."""
     cli()

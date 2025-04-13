@@ -1,13 +1,16 @@
 import os
 import subprocess
-from commit_ai.git_utils import get_git_diff
+from .git_utils import get_git_diff
 import google.generativeai as genai
+from dotenv import load_dotenv
+
+load_dotenv()
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
 genai.configure(api_key=GOOGLE_API_KEY)
 
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-2.0-flash')
 
 def generate_commit_message(staged_only: bool = True) -> str:
 	git_changes = subprocess.run(["git", "diff", "--cached"], capture_output=True, text=True)

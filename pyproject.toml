@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "commit-ai"
+version = "0.1.0"
+description = "AI-powered git commit message generator"
+authors = [
+    { name = "Henrique Costa", email = "henriquebenedictocostadev@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "click>=8.0",
+    "toml>=0.10.2",
+    "python-dotenv>=1.1.0",
+    # DeeperSeek will be installed from requirements.txt
+]
+
+[project.scripts]
+commit-ai = "commit_ai.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
